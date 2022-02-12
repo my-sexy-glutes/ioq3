@@ -46,6 +46,7 @@ cvar_t	*cl_voipCaptureMult;
 cvar_t	*cl_voipShowMeter;
 cvar_t	*cl_voipProtocol;
 cvar_t	*cl_voip;
+cvar_t  *cl_voipOutputGain;
 #endif
 
 #ifdef USE_RENDERER_DLOPEN
@@ -3654,6 +3655,7 @@ void CL_Init( void ) {
 	cl_voip = Cvar_Get ("cl_voip", "1", CVAR_ARCHIVE);
 	Cvar_CheckRange( cl_voip, 0, 1, qtrue );
 	cl_voipProtocol = Cvar_Get ("cl_voipProtocol", cl_voip->integer ? "opus" : "", CVAR_USERINFO | CVAR_ROM);
+    cl_voipOutputGain = Cvar_Get ("cl_voipOutputGain", "1.0", CVAR_ARCHIVE);
 #endif
 
 

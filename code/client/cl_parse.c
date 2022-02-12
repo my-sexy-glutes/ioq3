@@ -664,7 +664,9 @@ qboolean CL_ShouldIgnoreVoipSender(int sender)
 	else if (clc.voipIgnore[sender])
 		return qtrue;  // just ignoring this guy.
 	else if (clc.voipGain[sender] == 0.0f)
-		return qtrue;  // too quiet to play.
+        return qtrue;  // too quiet to play.
+	else if (cl_voipOutputGain->value <= 0.0f)
+        return qtrue;  // all voip output is muted
 
 	return qfalse;
 }
@@ -682,13 +684,13 @@ static void CL_PlayVoip(int sender, int samplecnt, const byte *data, int flags)
 	if(flags & VOIP_DIRECT)
 	{
 		S_RawSamples(sender + 1, samplecnt, 48000, 2, 1,
-	             data, clc.voipGain[sender], -1);
+	             data, cl_voipOutputGain->value * clc.voipGain[sender], -1);
 	}
 
 	if(flags & VOIP_SPATIAL)
 	{
 		S_RawSamples(sender + MAX_CLIENTS + 1, samplecnt, 48000, 2, 1,
-	             data, 1.0f, sender);
+	             data, cl_voipOutputGain->value, sender);
 	}
 }
 
