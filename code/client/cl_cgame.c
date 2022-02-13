@@ -924,6 +924,7 @@ void CL_FirstSnapshot( void ) {
 			}
 			clc.voipIgnore[i] = qfalse;
 			clc.voipGain[i] = 1.0f;
+			clc.voipLastReceivedTime[i] = 0;
 		}
 		clc.voipCodecInitialized = qtrue;
 		clc.voipMuteAll = qfalse;

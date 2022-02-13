@@ -290,9 +290,33 @@ void CL_Voip_f( void )
 		Com_Printf("VoIP: unmuting incoming voice\n");
 		CL_AddReliableCommand("voip unmuteall", qfalse);
 		clc.voipMuteAll = qfalse;
+	} else if (strcmp(cmd, "whotalked") == 0) {
+		int seconds = 10;  // last 10 seconds by default
+		if (Cmd_Argc() > 2) {
+			if (Q_isanumber(Cmd_Argv(2))) {
+				seconds = atoi(Cmd_Argv(2));
+			} else {
+				Com_Printf("VoIP: invalid duration, using default: %d seconds\n", seconds);
+			}
+		}
+		Com_Printf("VoIP: speakers in the last %d seconds\n", seconds);
+		int currentTime = Sys_Milliseconds();
+		int cutoffTime = currentTime - (seconds * 1000);
+		qboolean anyPlayersSpoke = qfalse;
+		for (int i = 0; i < MAX_CLIENTS; i++) {
+			if (clc.voipLastReceivedTime[i] && (clc.voipLastReceivedTime[i] > cutoffTime)) {
+				Com_Printf("        %d seconds ago player #%d spoke\n",
+						(currentTime - clc.voipLastReceivedTime[i]) / 1000, i);
+				anyPlayersSpoke = qtrue;
+			}
+		}
+		if (anyPlayersSpoke == qfalse) {
+			Com_Printf("        **None**\n");
+		}
 	} else {
 		Com_Printf("usage: voip [un]ignore <playerID#>\n"
 		           "       voip [un]muteall\n"
+		           "       voip whotalked [seconds]\n"
 		           "       voip gain <playerID#> [value]\n");
 	}
 }

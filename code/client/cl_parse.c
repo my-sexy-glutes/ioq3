@@ -750,7 +750,12 @@ void CL_ParseVoip ( msg_t *msg, qboolean ignoreData ) {
 		return;   // can't handle VoIP without libopus!
 	} else if (sender >= MAX_CLIENTS) {
 		return;   // bogus sender.
-	} else if (CL_ShouldIgnoreVoipSender(sender)) {
+	}
+
+	// update voipLastReceivedTime even if sender muted
+	clc.voipLastReceivedTime[sender] = Sys_Milliseconds();
+
+	if (CL_ShouldIgnoreVoipSender(sender)) {
 		return;   // Channel is muted, bail.
 	}
 

@@ -245,6 +245,7 @@ typedef struct {
 	byte voipIncomingGeneration[MAX_CLIENTS];
 	int voipIncomingSequence[MAX_CLIENTS];
 	float voipGain[MAX_CLIENTS];
+	int voipLastReceivedTime[MAX_CLIENTS];
 	qboolean voipIgnore[MAX_CLIENTS];
 	qboolean voipMuteAll;
 
